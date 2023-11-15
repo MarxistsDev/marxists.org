@@ -1,0 +1,8 @@
+{{ define "search_bar" }}
+    <form class="md-5 flex flex-col md:flex-row justify-center w-3/4 items-center mx-auto">
+        <div class="form-control w-full">
+            <input type="text" placeholder="Search" v-model="queryRef" class="input input-bordered" />
+        </div>
+        <input type="submit" class="btn btn-ghost btn-circle w-full md:w-12 text-2xl" value="☭" />
+    </form>
+{{ end }}
