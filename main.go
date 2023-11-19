@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"marxists.org/controllers"
 	"marxists.org/models"
+	"marxists.org/models/repository"
 )
 
 func main() {
@@ -27,7 +28,9 @@ func main() {
 	router.StaticFile("style.css", "./www/styles/style.css")
 	router.LoadHTMLGlob("views/*.gohtml")
 
-	authorController := controllers.AuthorController{Database: db}
+	var authorRepo repository.AuthorRepository
+	authorRepo = repository.AuthorRepository{Db: db}
+	authorController := controllers.AuthorController{Repo: authorRepo}
 
 	router.GET("/", controllers.IndexHandler)
 
