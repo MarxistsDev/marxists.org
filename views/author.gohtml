@@ -1,4 +1,3 @@
-<!-- views/author.gohtml -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +8,20 @@
 <body>
     <h1>Author Details</h1>
     <ul>
+        <li><img src="https://www.marxists.org/{{.author.Glossary.Image}}" /></li>
         <li><strong>Author ID:</strong> {{.author.AuthorID}}</li>
         <li><strong>Name:</strong> {{.author.Name}}</li>
         <li><strong>Old Works:</strong> {{.author.OldWorks}}</li>
+    </ul>
+    <section>
+        {{ .author.Glossary.Description }}  
+    </section>
+
+    <h2>All works</h2>
+    <ul>
+        {{range $work := .author.Works}}
+            <li>{{$work.Title}}</li>
+        {{end}}
     </ul>
 </body>
 </html>

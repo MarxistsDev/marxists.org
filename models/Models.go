@@ -1,10 +1,16 @@
 package models
 
-// Author represents the Author table.
+import "html/template"
+
+// Author entity
 type Author struct {
-	AuthorID int    `gorm:"primaryKey" json:"author_id"`
-	Name     string `json:"name" binding:"required"`
-	OldWorks string `json:"old_works"`
+	AuthorID  int    `gorm:"primaryKey;column:author_id" json:"author_id"`
+	Name      string `gorm:"not null"`
+	OldWorks  string
+	Works     []*Work    `gorm:"many2many:author_works;joinTable:author_works;joinForeignKey:author_author_id;joinReferences:work_work_id"`
+	Glossary  Glossary   `gorm:"foreignKey:AuthorID"`
+	Movements []Movement `gorm:"many2many:movement_authors;foreignKey:AuthorID"`
+	//Collections []Collection `gorm:"many2many:collection_authors"`
 }
 
 // TableName specifies the table name for the Author model
@@ -12,70 +18,98 @@ func (Author) TableName() string {
 	return "Author"
 }
 
-// Glossary represents the Glossary table.
+// Glossary entity
 type Glossary struct {
-	GlossaryID  int    `gorm:"primaryKey" json:"glossary_id"`
-	AuthorID    int    `json:"author_id" binding:"required"`
-	Name        string `json:"name" binding:"required"`
-	Shortname   string `json:"shortname"`
-	Image       string `json:"image"`
-	Description string `json:"description"`
+	GlossaryID int `gorm:"primaryKey"`
+	AuthorID   int
+	Name       string `gorm:"not null"`
+	//ShortName   string
+	Image       string
+	Description template.HTML
 }
 
-// Work represents the Work table.
+func (Glossary) TableName() string {
+	return "Glossary"
+}
+
+// Work entity
 type Work struct {
-	WorkID          int    `gorm:"primaryKey" json:"work_id"`
-	Title           string `json:"title"`
-	Written         string `json:"written"`
-	PublicationDate string `json:"publication_date"`
-	Source          string `json:"source"`
-	Translated      string `json:"translated"`
-	Transcription   string `json:"transcription"`
-	Copyright       string `json:"copyright"`
-	OldWorksIndex   string `json:"old_works_index"`
+	WorkID          int    `gorm:"primaryKey"`
+	Title           string `gorm:"not null"`
+	Written         string `gorm:"type:date"`
+	PublicationDate string `gorm:"type:date"`
+	Source          string
+	Translated      string
+	Transcription   string
+	Copyright       string
+	OldWorksIndex   string
+	Authors         []Author     `gorm:"many2many:author_works"`
+	Articles        []Article    `gorm:"foreignKey:WorkID"`
+	Collections     []Collection `gorm:"many2many:collection_works"`
 }
 
-// AuthorWork represents the Author_Work table for the Many-to-Many relationship between Author and Work.
-type AuthorWork struct {
-	AuthorWorkID int `gorm:"primaryKey" json:"author_work_id"`
-	AuthorID     int `json:"author_id" binding:"required"`
-	WorkID       int `json:"work_id" binding:"required"`
+func (Work) TableName() string {
+	return "Work"
 }
 
-// Article represents the Article table.
+/*type AuthorWork struct {
+	//AuthorWorkID int `gorm:"primaryKey" json:"author_work_id"`
+	AuthorID int `primaryKey;gorm:"column:author_author_id" json:"author_id" binding:"required"`
+	WorkID   int `primaryKey;gorm:"column:work_work_id" json:"work_id" binding:"required"`
+}
+
+func (AuthorWork) TableName() string {
+	return "AuthorWork"
+}*/
+
+// Article entity
 type Article struct {
-	ArticleID int    `gorm:"primaryKey" json:"article_id"`
-	WorkID    int    `json:"work_id" binding:"required"`
-	Title     string `json:"title" binding:"required"`
-	Content   string `json:"content" binding:"required"`
-	Note      string `json:"note"`
-	OldWorks  string `json:"old_works"`
+	ArticleID int    `gorm:"primaryKey"`
+	WorkID    int    `gorm:"not null"`
+	Title     string `gorm:"not null"`
+	Content   string
+	Note      string
+	OldWorks  string
 }
 
-// Movement represents the Movement table.
+func (Article) TableName() string {
+	return "Article"
+}
+
+// Movement entity
 type Movement struct {
-	MovementID  int    `gorm:"primaryKey" json:"movement_id"`
-	Name        string `json:"name" binding:"required"`
-	OldMovement string `json:"old_movement"`
+	MovementID  int    `gorm:"primaryKey"`
+	Name        string `gorm:"not null"`
+	OldMovement string
+	Authors     []Author `gorm:"many2many:movement_authors"`
 }
 
-// Collection represents the Collection table.
+func (Movement) TableName() string {
+	return "Movement"
+}
+
+// Collection entity
 type Collection struct {
-	CollectionID  int    `json:"collection_id"`
-	Name          string `json:"name" binding:"required"`
-	OldCollection string `json:"old_collection"`
+	CollectionID  int    `gorm:"primaryKey"`
+	Name          string `gorm:"not null"`
+	OldCollection string
+	Works         []Work `gorm:"many2many:collection_works"`
 }
 
-// MovementAuthor represents the Movement_Author table for the Many-to-Many relationship between Movement and Author.
-type MovementAuthor struct {
-	MovementAuthorID int `gorm:"primaryKey" json:"movement_author_id"`
-	MovementID       int `json:"movement_id" binding:"required"`
-	AuthorID         int `json:"author_id" binding:"required"`
+func (Collection) TableName() string {
+	return "Collection"
 }
 
-// CollectionWork represents the Collection_Work table for the Many-to-Many relationship between Collection and Work.
+// MovementAuthor entity
+/*type MovementAuthor struct {
+	MovementAuthorID int `gorm:"primaryKey"`
+	MovementID       int `gorm:"not null"`
+	AuthorID         int `gorm:"not null"`
+}
+
+// CollectionWork entity
 type CollectionWork struct {
-	CollectionWorkID int `gorm:"primaryKey" json:"collection_work_id"`
-	CollectionID     int `json:"collection_id" binding:"required"`
-	WorkID           int `json:"work_id" binding:"required"`
-}
+	CollectionWorkID int `gorm:"primaryKey"`
+	CollectionID     int `gorm:"not null"`
+	WorkID           int `gorm:"not null"`
+}*/

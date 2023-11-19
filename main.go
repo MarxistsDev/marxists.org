@@ -6,31 +6,37 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"marxists.org/controllers"
+	"marxists.org/models"
 )
 
 func main() {
-	//Establish connection
 	db, err := gorm.Open(sqlite.Open("db.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	// Set up Gin router
-	router := gin.Default()
+	db.AutoMigrate(&models.Author{}, &models.Glossary{}, &models.Work{},
+		&models.Article{}, &models.Collection{}, &models.Movement{}) //, &models.AuthorWork{})
 
-	// Load HTML templates
+	/*if err := db.SetupJoinTable(&models.Author{}, "Works", &models.AuthorWork{}); err != nil {
+		println(models.AuthorWork{}.TableName(), err.Error())
+		panic("Failed to setup join table")
+	}*/
+
+	router := gin.Default()
 	router.StaticFile("style.css", "./www/styles/style.css")
 	router.LoadHTMLGlob("views/*.gohtml")
 
-	// Define routes
+	authorController := controllers.AuthorController{Database: db}
+
 	router.GET("/", controllers.IndexHandler)
 
 	authorRoutes := router.Group("/author")
 	{
-		authorRoutes.GET("/", controllers.AuthorIndex(db))
+		authorRoutes.GET("/:id", authorController.AuthorById)
 		//authorRoutes.GET("/details", controllers.AuthorDetails)
 	}
 
 	// Start the server
-	router.Run(":8080")
+	router.Run("localhost:8080")
 }
