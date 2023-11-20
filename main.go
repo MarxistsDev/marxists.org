@@ -3,7 +3,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"marxists.org/controllers"
 	"marxists.org/models"
@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("db.db"), &gorm.Config{})
+	dsn := "host=localhost user=postgres password=password dbname=marxists port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}

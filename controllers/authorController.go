@@ -13,7 +13,7 @@ type AuthorController struct {
 }
 
 func html404(c *gin.Context, errMsg string) {
-	c.HTML(http.StatusNotFound, "404.gohtml", gin.H{"Error": "The Parameter must be a number"})
+	c.HTML(http.StatusNotFound, "404.gohtml", gin.H{"Error": errMsg})
 }
 
 // IndexHandler handles the root route.
@@ -28,7 +28,7 @@ func (ctrl *AuthorController) AuthorById(c *gin.Context) {
 	}
 
 	author, err := ctrl.Repo.Get(author_id)
-	if err == nil {
+	if err != nil {
 		html404(c, "Author not Found")
 		return
 	}

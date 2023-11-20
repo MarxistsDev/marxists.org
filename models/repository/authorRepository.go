@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"gorm.io/gorm"
 	"marxists.org/models"
 )
@@ -12,13 +14,14 @@ type AuthorRepository struct {
 func (repo AuthorRepository) GetAll() []*models.Author {
 
 	var authors []*models.Author
-	repo.Db.Model(&models.Author{}).Find(&authors)
+	repo.Db.Find(&authors)
 	return authors
 }
 
 func (repo AuthorRepository) Get(id int) (*models.Author, error) {
 
 	var author models.Author
-	err := repo.Db.Model(&models.Author{}).Joins("Glossary").Preload("Works").First(&author, id).Error
+	err := repo.Db.Joins("Glossary").Preload("Works").First(&author, id).Error
+	fmt.Println("Num of Works: ", len(author.Works))
 	return &author, err
 }
