@@ -1,6 +1,8 @@
 package models
 
-import "html/template"
+import (
+	"html/template"
+)
 
 // Author entity
 type Author struct {
@@ -70,6 +72,7 @@ type Article struct {
 	Content   string
 	Note      string
 	OldWorks  string
+	//search    string `gorm:"type:tsvector"`
 }
 
 func (Article) TableName() string {

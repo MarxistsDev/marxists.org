@@ -29,9 +29,8 @@ func main() {
 	router.StaticFile("style.css", "./www/styles/style.css")
 	router.LoadHTMLGlob("views/*.gohtml")
 
-	var authorRepo repository.AuthorRepository
-	authorRepo = repository.AuthorRepository{Db: db}
-	authorController := controllers.AuthorController{Repo: authorRepo}
+	authorController := controllers.AuthorController{Repo: repository.AuthorRepository{Db: db}}
+	searchController := controllers.SearchController{Repo: repository.SearchRepository{Db: db}}
 
 	router.GET("/", controllers.IndexHandler)
 
@@ -40,6 +39,8 @@ func main() {
 		authorRoutes.GET("/:id", authorController.AuthorById)
 		//authorRoutes.GET("/details", controllers.AuthorDetails)
 	}
+
+	router.GET("/search/:query", searchController.Search)
 
 	// Start the server
 	router.Run("localhost:8080")
