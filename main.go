@@ -31,16 +31,15 @@ func main() {
 
 	authorController := controllers.AuthorController{Repo: repository.AuthorRepository{Db: db}}
 	searchController := controllers.SearchController{Repo: repository.SearchRepository{Db: db}}
+	workController := controllers.WorkController{Repo: repository.WorkRepository{Db: db}}
 
 	router.GET("/", controllers.IndexHandler)
 
-	authorRoutes := router.Group("/author")
-	{
-		authorRoutes.GET("/:id", authorController.AuthorById)
-		//authorRoutes.GET("/details", controllers.AuthorDetails)
-	}
+	router.GET("/author/:id", authorController.AuthorById)
 
 	router.GET("/search/:query", searchController.Search)
+
+	router.GET("/work/:id", workController.Work)
 
 	// Start the server
 	router.Run("localhost:8080")
