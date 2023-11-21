@@ -21,5 +21,5 @@ func (ctrl *SearchController) Search(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "search.gohtml", gin.H{"articles": articles, "hasSearch": true})
+	c.HTML(http.StatusOK, "search.gohtml", gin.H{"articles": articles, "query": query, "hasSearch": true})
 }

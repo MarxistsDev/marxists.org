@@ -6,3 +6,5 @@ module.exports = {
   },
   plugins: [require("daisyui")],
 }
+
+//npx tailwindcss -o ./www/styles/style.css --watch 

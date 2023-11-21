@@ -38,8 +38,8 @@ func (Glossary) TableName() string {
 type Work struct {
 	WorkID          int    `gorm:"primaryKey"`
 	Title           string `gorm:"not null"`
-	Written         string `gorm:"type:date"`
-	PublicationDate string `gorm:"type:date"`
+	Written         string //`gorm:"type:date"`
+	PublicationDate string //`gorm:"type:date"`
 	Source          string
 	Translated      string
 	Transcription   string
@@ -54,22 +54,12 @@ func (Work) TableName() string {
 	return "Work"
 }
 
-/*type AuthorWork struct {
-	//AuthorWorkID int `gorm:"primaryKey" json:"author_work_id"`
-	AuthorID int `primaryKey;gorm:"column:author_author_id" json:"author_id" binding:"required"`
-	WorkID   int `primaryKey;gorm:"column:work_work_id" json:"work_id" binding:"required"`
-}
-
-func (AuthorWork) TableName() string {
-	return "AuthorWork"
-}*/
-
 // Article entity
 type Article struct {
 	ArticleID int    `gorm:"primaryKey"`
 	WorkID    int    `gorm:"not null"`
 	Title     string `gorm:"not null"`
-	Content   string
+	Content   template.HTML
 	Note      string
 	OldWorks  string
 	//search    string `gorm:"type:tsvector"`
@@ -102,17 +92,3 @@ type Collection struct {
 func (Collection) TableName() string {
 	return "Collection"
 }
-
-// MovementAuthor entity
-/*type MovementAuthor struct {
-	MovementAuthorID int `gorm:"primaryKey"`
-	MovementID       int `gorm:"not null"`
-	AuthorID         int `gorm:"not null"`
-}
-
-// CollectionWork entity
-type CollectionWork struct {
-	CollectionWorkID int `gorm:"primaryKey"`
-	CollectionID     int `gorm:"not null"`
-	WorkID           int `gorm:"not null"`
-}*/

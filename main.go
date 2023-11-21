@@ -2,6 +2,8 @@
 package main
 
 import (
+	"html/template"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,6 +28,7 @@ func main() {
 	}*/
 
 	router := gin.Default()
+	router.SetFuncMap(template.FuncMap{"highlightSearch": repository.HighlightMatchingWords})
 	router.StaticFile("style.css", "./www/styles/style.css")
 	router.LoadHTMLGlob("views/*.gohtml")
 
