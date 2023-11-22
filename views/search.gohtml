@@ -24,11 +24,7 @@
     <h3 class="text-3xl">Articles</h3>
     <ul>
         {{range $article := .articles}}
-            <li>{{$article.Title}}, {{$article.ArticleID}}
-                <blockquote class="pl-4">
-                    {{ highlightSearch $article.Content $.query }}
-                </blockquote>    
-            </li>
+            <li><a href="/work/{{$article.WorkID}}">{{$article.Title}}</a></li>
         {{end}}
     </ul>
 
