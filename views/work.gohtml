@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style.css">
     <title>MIA</title>
 </head>
 <body>
     {{template "navbar" .}}
-    
-    <h3>{{ .work.Title }}</h3>
-    <ul>
-        {{range $article := .work.Articles}}
-            <li>{{$article.Title}}</li>
-        {{end}}
-    </ul>
 
-    <br />
-    <hr />
-    <br />
+    <main class="flex flex-row">
+        <aside class="w-1/4">
+            <h2 class="text-3xl">{{ .work.Title }}</h2>
+            <ul>
+                {{range $index, $article := .work.Articles}}
+                    <li><a hx-get="/work/{{$.work.WorkID}}/{{$index}}" hx-trigger="click" hx-target="#article_content" class="cursor-pointer">{{$article.Title}}</a></li>
+                {{end}}
+            </ul>
+        </aside>
 
-    <section id="article_content">
-        {{ (index .work.Articles 0).Content }}
-    </section>
+        <section id="article_content" hx-swap-oob="true" class="pl-3 w-fit">
+            {{ (index .work.Articles .index).Content }}
+        </section>
+    </main>
 
 </body>
 </html>

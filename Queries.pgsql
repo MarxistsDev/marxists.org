@@ -31,7 +31,7 @@ CREATE INDEX idx_glossary_search on "Glossary" using GIN(search);
 ----------------------
 
 SELECT * FROM "Glossary" WHERE author_id is not NULL 
-    and search @@ websearch_to_tsquery('english','David') 
-    or search @@ websearch_to_tsquery('simple','David')
+    and (search @@ websearch_to_tsquery('english','David') 
+    or search @@ websearch_to_tsquery('simple','David'))
     ORDER by ts_rank(search, websearch_to_tsquery('english','David')) +
     ts_rank(search, websearch_to_tsquery('simple','David')) DESC;

@@ -30,9 +30,9 @@ func (repo SearchRepository) SearchGlossary(query string) (*[]*models.Glossary, 
 
 	err := repo.Db.
 		Raw("Select * from \"Glossary\" "+
-			"WHERE search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?) "+
+			"WHERE author_id is not NULL and ((search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?)) or name ILIKE ?) "+
 			"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC;",
-			query, query, query, query).
+			query, query, "%"+query+"%", query, query).
 		Find(&glossaries).Error
 	return &glossaries, err
 }

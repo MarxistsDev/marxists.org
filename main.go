@@ -42,7 +42,7 @@ func main() {
 
 	router.GET("/search/:query", searchController.Search)
 
-	router.GET("/work/:id", workController.Work)
+	router.GET("/work/:id/*ch", workController.Work)
 
 	// Start the server
 	router.Run("localhost:8080")

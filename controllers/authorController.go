@@ -20,7 +20,7 @@ func html404(c *gin.Context, errMsg string) {
 // IndexHandler method
 func (ctrl *AuthorController) AuthorById(c *gin.Context) {
 
-	author_id, conversion_err := strconv.Atoi(c.Params.ByName("id"))
+	author_id, conversion_err := strconv.Atoi(c.Param("id"))
 
 	if conversion_err != nil {
 		html404(c, "The Parameter must be a number")
