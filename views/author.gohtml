@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
     <title>Author Details</title>
 </head>
 <body>
+    {{template "navbar" .}}
     <h1>Author Details</h1>
     <ul>
         <li><img src="https://www.marxists.org/{{.author.Glossary.Image}}" /></li>
@@ -20,7 +22,7 @@
     <h2>All works</h2>
     <ul>
         {{range $work := .author.Works}}
-            <li>{{$work.Title}}</li>
+            <li><a href="/work/{{$work.WorkID}}">{{$work.Title}}</a></li>
         {{end}}
     </ul>
 </body>

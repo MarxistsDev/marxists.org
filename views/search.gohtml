@@ -11,9 +11,20 @@
     
     <h3 class="text-3xl">{{ .query }}</h3>
     <hr class="w-1/3"/>
+
+    <h3 class="text-3xl">Glossary</h3>
+    <ul>
+        {{range $glossary := .glossaries}}
+            <li><a href="/author/{{$glossary.AuthorID}}">{{$glossary.Name}}</a></li>
+        {{end}}
+    </ul>
+
+    <br />
+    <br />
+    <h3 class="text-3xl">Articles</h3>
     <ul>
         {{range $article := .articles}}
-            <li>{{$article.Title}}
+            <li>{{$article.Title}}, {{$article.ArticleID}}
                 <blockquote class="pl-4">
                     {{ highlightSearch $article.Content $.query }}
                 </blockquote>    

@@ -33,5 +33,5 @@ func (ctrl *AuthorController) AuthorById(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "author.gohtml", gin.H{"author": author})
+	c.HTML(http.StatusOK, "author.gohtml", gin.H{"author": author, "hasSearch": true})
 }

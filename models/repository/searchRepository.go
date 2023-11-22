@@ -17,8 +17,24 @@ type SearchRepository struct {
 func (repo SearchRepository) SearchArticle(query string) (*[]*models.Article, error) {
 
 	var articles []*models.Article
-	err := repo.Db.Where("search @@ websearch_to_tsquery(?)", query).Find(&articles).Error
+	err := repo.Db.Raw("Select * from \"Article\" "+
+		"WHERE search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?) "+
+		"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC;",
+		query, query, query, query).Find(&articles).Error
 	return &articles, err
+}
+
+func (repo SearchRepository) SearchGlossary(query string) (*[]*models.Glossary, error) {
+
+	var glossaries []*models.Glossary
+
+	err := repo.Db.
+		Raw("Select * from \"Glossary\" "+
+			"WHERE search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?) "+
+			"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC;",
+			query, query, query, query).
+		Find(&glossaries).Error
+	return &glossaries, err
 }
 
 // This has an offsert since the toLower function converts everything to UTF-8, but some of the text uses
