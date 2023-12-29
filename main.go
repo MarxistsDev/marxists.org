@@ -13,14 +13,14 @@ import (
 )
 
 func main() {
-	dsn := "host=localhost user=postgres password=password dbname=marxists port=5432 sslmode=disable"
+	dsn := "host=localhost port=5432 user=postgres password=password dbname=marxists sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	db.AutoMigrate(&models.Author{}, &models.Glossary{}, &models.Work{},
-		&models.Article{}, &models.Collection{}, &models.Movement{}) //, &models.AuthorWork{})
+		&models.Collection{}, &models.Movement{}) //, &models.AuthorWork{})
 
 	/*if err := db.SetupJoinTable(&models.Author{}, "Works", &models.AuthorWork{}); err != nil {
 		println(models.AuthorWork{}.TableName(), err.Error())
@@ -45,5 +45,5 @@ func main() {
 	router.GET("/work/:id/*ch", workController.Work)
 
 	// Start the server
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }

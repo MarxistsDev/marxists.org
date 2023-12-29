@@ -1,6 +1,12 @@
 {
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "daisyui": "^4.0.7",
     "tailwind": "^4.0.0"
+  },
+  "scripts": {
+    "tw": "npx tailwindcss -o ./www/styles/style.css --watch",
+    "go": "go run *.go",
+    "start": "npm run tw & npm run go"
   }
 }

@@ -30,8 +30,8 @@ func (ctrl *WorkController) Work(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(ch_err != nil, len(work.Articles), ch_id)
-	if ch_err != nil || len(work.Articles) <= ch_id || ch_id < 0 {
+	fmt.Println(ch_err != nil, len(work.Works), ch_id)
+	if ch_err != nil || len(work.Works) <= ch_id || ch_id < 0 {
 		ch_id = 0
 	}
 

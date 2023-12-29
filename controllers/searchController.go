@@ -21,11 +21,11 @@ func (ctrl *SearchController) Search(c *gin.Context) {
 		return
 	}
 
-	articles, err := ctrl.Repo.SearchArticle(query)
+	articles, err := ctrl.Repo.SearchWork(query)
 	if err != nil {
 		html404(c, "Author not Found")
 		return
 	}
 
-	c.HTML(http.StatusOK, "search.gohtml", gin.H{"glossaries": glossaries, "articles": articles, "query": query, "hasSearch": true})
+	c.HTML(http.StatusOK, "search.gohtml", gin.H{"glossaries": glossaries, "articles": articles, "query": query, "hasSearch": false})
 }

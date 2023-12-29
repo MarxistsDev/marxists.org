@@ -12,9 +12,9 @@ type WorkRepository struct {
 }
 
 func (repo WorkRepository) Get(id int) (*models.Work, error) {
-
 	var work models.Work
-	err := repo.Db.Debug().Preload("Articles").First(&work, id).Error
-	fmt.Println("Num of Articles: ", len(work.Articles))
+	err := repo.Db.Preload("Works").First(&work, id).Error
+	fmt.Println("Work Title: ", work.Title)
+	fmt.Println("Num of Articles: ", len(work.Works))
 	return &work, err
 }

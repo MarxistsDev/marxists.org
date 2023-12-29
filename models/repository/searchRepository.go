@@ -14,10 +14,10 @@ type SearchRepository struct {
 	Db *gorm.DB
 }
 
-func (repo SearchRepository) SearchArticle(query string) (*[]*models.Article, error) {
+func (repo SearchRepository) SearchWork(query string) (*[]*models.Work, error) {
 
-	var articles []*models.Article
-	err := repo.Db.Raw("Select * from \"Article\" "+
+	var articles []*models.Work
+	err := repo.Db.Raw("Select * from \"Work\" "+
 		"WHERE search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?) "+
 		"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC;",
 		query, query, query, query).Find(&articles).Error

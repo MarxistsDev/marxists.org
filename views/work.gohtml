@@ -9,20 +9,26 @@
 </head>
 <body>
     {{template "navbar" .}}
+    <br />
+    <main class="flex flex-col md:flex-row px-4 md:mx-auto w-fit max-w-full">
+            {{if gt (len .work.Works) 0}}
+                <aside class="md:w-1/4 mr-4">
+                    <h2 class="text-3xl">{{ .work.Title }}</h2>
+                        <ul>
+                            {{range $index, $article := .work.Works}}
+                                <li class="my-4"><a hx-get="/work/{{$.work.WorkID}}/{{$index}}" hx-trigger="click" hx-target="#article_content" class="cursor-pointer">{{$article.Title}}</a></li>
+                            {{end}}
+                        </ul>
+                </aside>
+            {{end}}
 
-    <main class="flex flex-row">
-        <aside class="w-1/4">
-            <h2 class="text-3xl">{{ .work.Title }}</h2>
-            <ul>
-                {{range $index, $article := .work.Articles}}
-                    <li><a hx-get="/work/{{$.work.WorkID}}/{{$index}}" hx-trigger="click" hx-target="#article_content" class="cursor-pointer">{{$article.Title}}</a></li>
-                {{end}}
-            </ul>
-        </aside>
-
-        <section id="article_content" hx-swap-oob="true" class="pl-3 w-fit">
-            {{ (index .work.Articles .index).Content }}
-        </section>
+        <article id="article_content" hx-swap-oob="true" class="prose md:prose-lg lg:prose-xl">
+            {{if gt (len .work.Works) 0}}
+                {{ (index .work.Works .index).Html }}
+            {{else}}
+                {{ .work.Html }}
+            {{end}}
+        </article>
     </main>
 
 </body>

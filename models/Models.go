@@ -22,8 +22,8 @@ func (Author) TableName() string {
 
 // Glossary entity
 type Glossary struct {
-	GlossaryID int `gorm:"primaryKey"`
-	AuthorID   int
+	GlossaryID int    `gorm:"primaryKey"`
+	AuthorID   int    `gorm:"foreignKey:Author"`
 	Name       string `gorm:"not null"`
 	//ShortName   string
 	Image       string
@@ -37,6 +37,7 @@ func (Glossary) TableName() string {
 // Work entity
 type Work struct {
 	WorkID          int    `gorm:"primaryKey"`
+	ParentWorkID    *int   `gorm:"foreignKey:ParentWorkID"`
 	Title           string `gorm:"not null"`
 	Written         string //`gorm:"type:date"`
 	PublicationDate string //`gorm:"type:date"`
@@ -44,29 +45,15 @@ type Work struct {
 	Translated      string
 	Transcription   string
 	Copyright       string
-	OldWorksIndex   string
+	OldWork         string
+	Html            template.HTML
+	Works           []Work       `gorm:"foreignKey:ParentWorkID"`
 	Authors         []Author     `gorm:"many2many:author_works"`
-	Articles        []Article    `gorm:"foreignKey:WorkID"`
 	Collections     []Collection `gorm:"many2many:collection_works"`
 }
 
 func (Work) TableName() string {
 	return "Work"
-}
-
-// Article entity
-type Article struct {
-	ArticleID int    `gorm:"primaryKey"`
-	WorkID    int    `gorm:"not null"`
-	Title     string `gorm:"not null"`
-	Content   template.HTML
-	Note      string
-	OldWorks  string
-	//search    string `gorm:"type:tsvector"`
-}
-
-func (Article) TableName() string {
-	return "Article"
 }
 
 // Movement entity
