@@ -30,12 +30,13 @@
         </section>
 
         <br />
-        <h3 class="text-3xl">All works</h3>
+        <h3 class="text-3xl">Works</h3>
         <ul>
             {{range $work := .author.Works}}
                 <li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href="/work/{{$work.WorkID}}">{{$work.Title}}</a></li>
             {{end}}
         </ul>
+
     </main>
 </body>
 </html>

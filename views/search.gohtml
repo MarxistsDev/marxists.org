@@ -19,7 +19,7 @@
             {{range $glossary := .glossaries}}
                 <a href="/author/{{$glossary.AuthorID}}">
                     <div class="flex flex-row">
-                        <img class="w-24 h-24 rounded-xl object-cover" src="https://www.marxists.org/{{$glossary.Image}}" />
+                        <img class="w-24 h-24 rounded-xl object-cover" src="https://www.marxists.org/{{$glossary.Image}}" alt="Picture of '{{$glossary.Name}}'"/>
                         <div>
                             <a class="text-blue-600 visited:text-purple-600" href="/author/{{$glossary.AuthorID}}">{{$glossary.Name}}</a>
                         </div>

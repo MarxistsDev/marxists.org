@@ -1,4 +1,4 @@
-SELECT article_id, work_id, title, content, note, old_works FROM "Article"
+/*SELECT article_id, work_id, title, content, note, old_works FROM "Article"
     WHERE search @@ websearch_to_tsquery('Japan');
 
 ALTER TABLE "Article" DROP search;
@@ -8,16 +8,18 @@ ADD search tsvector
         to_tsvector('english', content)
     ) stored;
 
-CREATE INDEX idx_search on "Article" using GIN(search);
+CREATE INDEX idx_search on "Article" using GIN(search);*/
 
 -----------------------
+-- sudo -u postgres psql postgres
+DROP DATABASE marxists;
+CREATE DATABASE marxists;
 
-
-SELECT * FROM "Glossary" WHERE author_id is not NULL 
+/*SELECT * FROM "Glossary" WHERE author_id is not NULL 
     and search @@ websearch_to_tsquery('David');
 
 
-ALTER TABLE "Glossary" DROP search;
+ALTER TABLE "Glossary" DROP search;*/
 ALTER TABLE "Glossary" 
 ADD search tsvector
     generated always as (

@@ -26,12 +26,22 @@ func (ctrl *WorkController) Work(c *gin.Context) {
 
 	work, err := ctrl.Repo.Get(work_id)
 	if err != nil {
-		html404(c, "Author not Found")
+		fmt.Println("Work:", work.Title)
+		html404(c, "Work not Found")
 		return
 	}
 
-	fmt.Println(ch_err != nil, len(work.Works), ch_id)
-	if ch_err != nil || len(work.Works) <= ch_id || ch_id < 0 {
+	// I assume that this means, that it got redirected to its Index
+	if work.WorkID != work_id {
+		for index, value := range work.Works {
+			if value.WorkID == work_id {
+				ch_id = index
+			}
+		}
+	}
+
+	fmt.Println(ch_err == nil, len(work.Works), ch_id)
+	if ch_err == nil || len(work.Works) <= ch_id || ch_id < 0 {
 		ch_id = 0
 	}
 
