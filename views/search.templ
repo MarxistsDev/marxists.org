@@ -1,0 +1,41 @@
+package views
+
+import (
+	"fmt"
+
+	"marxists.org/models"
+)
+
+templ Search(glossaries *[]*models.Glossary, works *[]*models.Work, query string) {
+	@Navbar(false)
+	<main class="mx-auto md:w-3/4 px-4 max-w-full">
+		<br/>
+		@SearchBar(query)
+		<br/>
+		<h3 class="text-3xl max-w-screen-lg">Glossary</h3>
+		<ul class="overflow-auto h-96 w-fit">
+			if (glossaries != nil) {
+				for _, glossary := range *glossaries {
+					<a href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>
+						<div class="flex flex-row">
+							<img class="w-24 h-24 rounded-xl object-cover" src={ fmt.Sprintf("https://www.marxists.org/%s", glossary.Image) } alt={ fmt.Sprintf("Picture of '%s'", glossary.Name) }/>
+							<div>
+								<a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>{ glossary.Name }</a>
+							</div>
+						</div>
+					</a>
+				}
+			}
+		</ul>
+		<br/>
+		<br/>
+		<h3 class="text-3xl">Articles</h3>
+		<ul>
+			if (works != nil) {
+				for _, work := range *works {
+					<li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }>{ work.Title }</a></li>
+				}
+			}
+		</ul>
+	</main>
+}

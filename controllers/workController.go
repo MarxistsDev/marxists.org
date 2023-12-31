@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"marxists.org/models/repository"
+	"marxists.org/views"
 )
 
 type WorkController struct {
@@ -45,5 +45,5 @@ func (ctrl *WorkController) Work(c *gin.Context) {
 		ch_id = 0
 	}
 
-	c.HTML(http.StatusOK, "work.gohtml", gin.H{"work": work, "index": ch_id, "hasSearch": true})
+	views.Base(views.Work(work, ch_id)).Render(c, c.Writer)
 }

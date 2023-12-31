@@ -1,21 +1,14 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
-	"marxists.org/models"
+	"marxists.org/views"
 )
 
-// IndexHandler method
 func IndexHandler(c *gin.Context) {
-	// Sample data for demonstration
-	author := models.Author{
-		AuthorID: 1,
-		Name:     "JohnDoe",
-		OldWorks: "sdfd",
-	}
+	views.Base(views.Index()).Render(c, c.Writer)
+}
 
-	// Render the template with author data
-	c.HTML(http.StatusOK, "index.gohtml", gin.H{"author": author, "hasSearch": false})
+func html404(c *gin.Context, errMsg string) {
+	views.Error404(errMsg).Render(c, c.Writer)
 }

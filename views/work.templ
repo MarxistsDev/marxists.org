@@ -1,0 +1,37 @@
+package views
+
+import (
+	"fmt"
+
+	"marxists.org/models"
+)
+
+templ Work (work *models.Work, index int) {
+	@Navbar(true)
+	<br/>
+	<main class="flex flex-col md:flex-row px-4 md:mx-auto w-fit max-w-full">
+		if (len(work.Works) > 0) {
+			<aside class="md:w-1/4 mr-4">
+				<h2 class="text-3xl">{ work.Title } </h2>
+				<ul>
+					for index, article := range work.Works {
+						<li class="my-4">
+							<a
+								hx-get={ fmt.Sprintf("/work/%d/%d", work.WorkID, index) }
+								hx-trigger="click"
+								hx-target="#article_content"
+								class="cursor-pointer"
+							>{ article.Title }</a>
+						</li>
+					}
+				</ul>
+			</aside>
+		}
+		<article id="article_content" hx-swap-oob="true" class="prose md:prose-lg lg:prose-xl">
+			if (len(work.Works) > 0) {
+				@templ.Raw(work.Works[index].Html)
+			}
+			@templ.Raw(work.Html)
+		</article>
+	</main>
+}

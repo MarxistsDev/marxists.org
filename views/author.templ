@@ -1,0 +1,49 @@
+package views
+
+import (
+	"fmt"
+
+	"marxists.org/models"
+)
+
+templ Author(author *models.Author) {
+	@Navbar(true)
+	<main class="mx-auto md:w-3/4 px-4 max-w-full">
+		<br/>
+		<section class="flex flex-col">
+			<div class="mx-auto md:mx-2 w-fit mb-4">
+				<img src={ fmt.Sprintf("https://www.marxists.org/%s", author.Glossary.Image) }/>
+				<p>{ author.Name } (ID: { fmt.Sprint(author.AuthorID) })</p>
+				<p>
+					<a
+						class="text-blue-600 visited:text-purple-600"
+						href={ templ.SafeURL(fmt.Sprintf("https://www.marxists.org/%s", author.OldWorks)) }
+					>Marxists.org Reference</a>
+				</p>
+			</div>
+			<div class="collapse collapse-arrow bg-base-200 w-fit md:w-3/4">
+				<input type="checkbox" name="bio" checked="checked"/>
+				<div class="collapse-title text-xl font-medium">
+					<h3 class="text-3xl">Biography</h3>
+				</div>
+				<div class="collapse-content">
+					<article class="prose max-w-none">
+						@templ.Raw(author.Glossary.Description)
+					</article>
+				</div>
+			</div>
+		</section>
+		<br/>
+		<h3 class="text-3xl">Works</h3>
+		<ul>
+			for _, work := range author.Works {
+				<li class="max-w-screen-lg my-4">
+					<a
+						class="text-blue-600 visited:text-purple-600"
+						href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }
+					>{ work.Title }</a>
+				</li>
+			}
+		</ul>
+	</main>
+}

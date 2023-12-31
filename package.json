@@ -6,7 +6,7 @@
   },
   "scripts": {
     "tw": "npx tailwindcss -o ./www/styles/style.css --watch",
-    "go": "go run *.go",
+    "go": "templ generate && go run *.go",
     "start": "npm run tw & npm run go"
   }
 }

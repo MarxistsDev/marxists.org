@@ -11,7 +11,7 @@ import (
 func Routes(router *gin.Engine) {
 	fmt.Println("DB:", DB, *DB)
 	router.StaticFile("style.css", "./www/styles/style.css")
-	router.LoadHTMLGlob("views/*.gohtml")
+	//router.LoadHTMLGlob("views/*.gohtml")
 
 	authorController := controllers.AuthorController{Repo: repository.AuthorRepository{Db: DB}}
 	searchController := controllers.SearchController{Repo: repository.SearchRepository{Db: DB}}

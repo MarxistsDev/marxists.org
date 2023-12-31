@@ -1,10 +1,9 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"marxists.org/models/repository"
+	"marxists.org/views"
 )
 
 type SearchController struct {
@@ -26,5 +25,5 @@ func (ctrl *SearchController) Search(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "search.gohtml", gin.H{"glossaries": glossaries, "articles": articles, "query": query, "hasSearch": false})
+	views.Base(views.Search(glossaries, articles, query)).Render(c, c.Writer)
 }

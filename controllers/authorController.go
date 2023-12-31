@@ -1,23 +1,17 @@
 package controllers
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"marxists.org/models/repository"
+	"marxists.org/views"
 )
 
 type AuthorController struct {
 	Repo repository.AuthorRepository
 }
 
-func html404(c *gin.Context, errMsg string) {
-	c.HTML(http.StatusNotFound, "404.gohtml", gin.H{"Error": errMsg})
-}
-
-// IndexHandler handles the root route.
-// IndexHandler method
 func (ctrl *AuthorController) AuthorById(c *gin.Context) {
 
 	author_id, conversion_err := strconv.Atoi(c.Param("id"))
@@ -33,5 +27,5 @@ func (ctrl *AuthorController) AuthorById(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "author.gohtml", gin.H{"author": author, "hasSearch": true})
+	views.Base(views.Author(author)).Render(c, c.Writer)
 }
