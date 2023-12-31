@@ -2,48 +2,27 @@
 package main
 
 import (
-	"html/template"
+	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"marxists.org/controllers"
-	"marxists.org/models"
-	"marxists.org/models/repository"
+	"marxists.org/initializers"
 )
 
+var DB *gorm.DB
+
+func init() {
+	initializers.LoadEnv()
+	initializers.ConnectDB()
+	DB = initializers.DB
+}
+
 func main() {
-	dsn := "host=localhost port=5432 user=postgres password=password dbname=marxists sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-
-	db.AutoMigrate(&models.Author{}, &models.Glossary{}, &models.Work{},
-		&models.Collection{}, &models.Movement{}) //, &models.AuthorWork{})
-
-	/*if err := db.SetupJoinTable(&models.Author{}, "Works", &models.AuthorWork{}); err != nil {
-		println(models.AuthorWork{}.TableName(), err.Error())
-		panic("Failed to setup join table")
-	}*/
-
+	fmt.Print("env DSN :", os.Getenv("DSN"))
 	router := gin.Default()
-	router.SetFuncMap(template.FuncMap{"highlightSearch": repository.HighlightMatchingWords})
-	router.StaticFile("style.css", "./www/styles/style.css")
-	router.LoadHTMLGlob("views/*.gohtml")
 
-	authorController := controllers.AuthorController{Repo: repository.AuthorRepository{Db: db}}
-	searchController := controllers.SearchController{Repo: repository.SearchRepository{Db: db}}
-	workController := controllers.WorkController{Repo: repository.WorkRepository{Db: db}}
-
-	router.GET("/", controllers.IndexHandler)
-
-	router.GET("/author/:id", authorController.AuthorById)
-
-	router.GET("/search/:query", searchController.Search)
-
-	router.GET("/work/:id/*ch", workController.Work)
-
+	Routes(router)
 	// Start the server
-	router.Run("0.0.0.0:8080")
+	router.Run(os.Getenv("PORT"))
 }

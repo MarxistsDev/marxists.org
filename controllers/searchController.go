@@ -12,7 +12,6 @@ type SearchController struct {
 }
 
 func (ctrl *SearchController) Search(c *gin.Context) {
-
 	query := c.Param("query")
 
 	glossaries, err := ctrl.Repo.SearchGlossary(query)
