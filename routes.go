@@ -18,7 +18,7 @@ func Routes(router *gin.Engine) {
 	workController := controllers.WorkController{Repo: repository.WorkRepository{Db: DB}}
 
 	router.GET("/", controllers.IndexHandler)
-	router.GET("/author/:id", authorController.AuthorById)
-	router.GET("/search/:query", searchController.Search)
+	router.GET("/author/:id/*page", authorController.AuthorById)
+	router.GET("/search/:query/*page", searchController.Search)
 	router.GET("/work/:id/*ch", workController.Work)
 }

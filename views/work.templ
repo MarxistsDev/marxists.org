@@ -14,12 +14,15 @@ templ Work (work *models.Work, index int) {
 			<aside class="md:w-1/4 mr-4">
 				<h2 class="text-3xl">{ work.Title } </h2>
 				<ul>
+					<li><a href={ templ.SafeURL(work.OldWork) }>Marxists.org Reference</a></li>
 					for index, article := range work.Works {
 						<li class="my-4">
 							<a
 								hx-get={ fmt.Sprintf("/work/%d/%d", work.WorkID, index) }
 								hx-trigger="click"
+								hx-select="#article_content"
 								hx-target="#article_content"
+								hx-swap="outerHTML"
 								class="cursor-pointer"
 							>{ article.Title }</a>
 						</li>
@@ -27,11 +30,12 @@ templ Work (work *models.Work, index int) {
 				</ul>
 			</aside>
 		}
-		<article id="article_content" hx-swap-oob="true" class="prose md:prose-lg lg:prose-xl">
+		<article id="article_content" class="prose md:prose-lg lg:prose-xl">
 			if (len(work.Works) > 0) {
 				@templ.Raw(work.Works[index].Html)
+			} else {
+				@templ.Raw(work.Html)
 			}
-			@templ.Raw(work.Html)
 		</article>
 	</main>
 }

@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +18,9 @@ func init() {
 }
 
 func main() {
-	fmt.Print("env DSN :", os.Getenv("DSN"))
 	router := gin.Default()
 
 	Routes(router)
-	// Start the server
+
 	router.Run(os.Getenv("PORT"))
 }

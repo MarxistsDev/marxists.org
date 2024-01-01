@@ -6,11 +6,11 @@ import (
 	"marxists.org/models"
 )
 
-templ Search(glossaries *[]*models.Glossary, works *[]*models.Work, query string) {
+templ Search(glossaries *[]*models.Glossary, works *[]*models.Work, query *string, page *uint) {
 	@Navbar(false)
 	<main class="mx-auto md:w-3/4 px-4 max-w-full">
 		<br/>
-		@SearchBar(query)
+		@SearchBar(*query)
 		<br/>
 		<h3 class="text-3xl max-w-screen-lg">Glossary</h3>
 		<ul class="overflow-auto h-96 w-fit">
@@ -30,12 +30,21 @@ templ Search(glossaries *[]*models.Glossary, works *[]*models.Work, query string
 		<br/>
 		<br/>
 		<h3 class="text-3xl">Articles</h3>
-		<ul>
-			if (works != nil) {
-				for _, work := range *works {
-					<li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }>{ work.Title }</a></li>
+		<section id="works">
+			<ul>
+				if (works != nil) {
+					for _, work := range *works {
+						<li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }>{ work.Title }</a></li>
+					}
 				}
-			}
-		</ul>
+			</ul>
+			<button
+				class="btn btn-wide"
+				hx-get={ fmt.Sprintf("%d", *page+1) }
+				hx-trigger="click"
+				hx-select="#works"
+				hx-target="#works"
+			>Load More</button>
+		</section>
 	</main>
 }

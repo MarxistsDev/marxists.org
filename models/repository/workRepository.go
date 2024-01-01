@@ -11,7 +11,7 @@ type WorkRepository struct {
 	Db *gorm.DB
 }
 
-func (repo WorkRepository) Get(id int) (*models.Work, error) {
+func (repo WorkRepository) Get(id uint) (*models.Work, error) {
 	var work models.Work
 	err := repo.Db.Preload("Works").First(&work, id).Error
 	fmt.Println("Work Title: ", work.Title)

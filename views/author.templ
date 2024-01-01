@@ -6,7 +6,7 @@ import (
 	"marxists.org/models"
 )
 
-templ Author(author *models.Author) {
+templ Author(author *models.Author, page *uint) {
 	@Navbar(true)
 	<main class="mx-auto md:w-3/4 px-4 max-w-full">
 		<br/>
@@ -35,15 +35,24 @@ templ Author(author *models.Author) {
 		</section>
 		<br/>
 		<h3 class="text-3xl">Works</h3>
-		<ul>
-			for _, work := range author.Works {
-				<li class="max-w-screen-lg my-4">
-					<a
-						class="text-blue-600 visited:text-purple-600"
-						href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }
-					>{ work.Title }</a>
-				</li>
-			}
-		</ul>
+		<section id="works">
+			<ul>
+				for _, work := range author.Works {
+					<li class="max-w-screen-lg my-4">
+						<a
+							class="text-blue-600 visited:text-purple-600"
+							href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }
+						>{ work.Title }</a>
+					</li>
+				}
+			</ul>
+			<button
+				class="btn btn-wide"
+				hx-get={ fmt.Sprintf("%d", *page+1) }
+				hx-trigger="click"
+				hx-select="#works"
+				hx-target="#works"
+			>Load More</button>
+		</section>
 	</main>
 }

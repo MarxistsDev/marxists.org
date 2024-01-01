@@ -6,7 +6,7 @@ import (
 
 // Author entity
 type Author struct {
-	AuthorID  int    `gorm:"primaryKey;column:author_id" json:"author_id"`
+	AuthorID  uint   `gorm:"primaryKey;column:author_id" json:"author_id"`
 	Name      string `gorm:"not null"`
 	OldWorks  string
 	Works     []*Work    `gorm:"many2many:author_works;joinTable:author_works;joinForeignKey:author_author_id;joinReferences:work_work_id"`
@@ -22,8 +22,8 @@ func (Author) TableName() string {
 
 // Glossary entity
 type Glossary struct {
-	GlossaryID int    `gorm:"primaryKey"`
-	AuthorID   int    `gorm:"foreignKey:Author"`
+	GlossaryID uint   `gorm:"primaryKey"`
+	AuthorID   uint   `gorm:"foreignKey:Author"`
 	Name       string `gorm:"not null"`
 	//ShortName   string
 	Image       string
@@ -36,8 +36,8 @@ func (Glossary) TableName() string {
 
 // Work entity
 type Work struct {
-	WorkID          int    `gorm:"primaryKey"`
-	ParentWorkID    *int   `gorm:"foreignKey:ParentWorkID"`
+	WorkID          uint   `gorm:"primaryKey"`
+	ParentWorkID    *uint  `gorm:"foreignKey:ParentWorkID"`
 	Title           string `gorm:"not null"`
 	Written         string //`gorm:"type:date"`
 	PublicationDate string //`gorm:"type:date"`
@@ -58,7 +58,7 @@ func (Work) TableName() string {
 
 // Movement entity
 type Movement struct {
-	MovementID  int    `gorm:"primaryKey"`
+	MovementID  uint   `gorm:"primaryKey"`
 	Name        string `gorm:"not null"`
 	OldMovement string
 	Authors     []Author `gorm:"many2many:movement_authors"`
@@ -70,7 +70,7 @@ func (Movement) TableName() string {
 
 // Collection entity
 type Collection struct {
-	CollectionID  int    `gorm:"primaryKey"`
+	CollectionID  uint   `gorm:"primaryKey"`
 	Name          string `gorm:"not null"`
 	OldCollection string
 	Works         []Work `gorm:"many2many:collection_works"`

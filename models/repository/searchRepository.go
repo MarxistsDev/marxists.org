@@ -9,12 +9,19 @@ type SearchRepository struct {
 	Db *gorm.DB
 }
 
-func (repo SearchRepository) SearchWork(query string) (*[]*models.Work, error) {
+func (repo SearchRepository) SearchWork(query string, page *uint) (*[]*models.Work, error) {
+	if page == nil {
+		page = new(uint)
+		*page = 0
+	}
+	var LIMIT uint = (*page + 1) * 25
+
 	var articles []*models.Work
 	err := repo.Db.Raw("Select * from \"Work\" "+
 		"WHERE search @@ websearch_to_tsquery('english', ?) or search @@ websearch_to_tsquery('simple', ?) "+
-		"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC;",
-		query, query, query, query).Find(&articles).Error
+		"Order by ts_rank(search, websearch_to_tsquery('english',?)) + ts_rank(search, websearch_to_tsquery('simple',?)) DESC "+
+		"LIMIT ?;",
+		query, query, query, query, LIMIT).Find(&articles).Error
 	return &articles, err
 }
 

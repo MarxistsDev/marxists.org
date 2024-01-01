@@ -24,7 +24,14 @@ func (ctrl *WorkController) Work(c *gin.Context) {
 		return
 	}
 
-	work, err := ctrl.Repo.Get(work_id)
+	if work_id < 0 {
+		html404(c, "The Parameter must be a positive number")
+		return
+	}
+
+	uwork_id := uint(work_id)
+
+	work, err := ctrl.Repo.Get(uwork_id)
 	if err != nil {
 		fmt.Println("Work:", work.Title)
 		html404(c, "Work not Found")
@@ -32,16 +39,16 @@ func (ctrl *WorkController) Work(c *gin.Context) {
 	}
 
 	// I assume that this means, that it got redirected to its Index
-	if work.WorkID != work_id {
+	if work.WorkID != uwork_id {
 		for index, value := range work.Works {
-			if value.WorkID == work_id {
+			if value.WorkID == uwork_id {
 				ch_id = index
 			}
 		}
 	}
 
-	fmt.Println(ch_err == nil, len(work.Works), ch_id)
-	if ch_err == nil || len(work.Works) <= ch_id || ch_id < 0 {
+	fmt.Println(ch_err != nil, len(work.Works), ch_id)
+	if ch_err != nil || len(work.Works) <= ch_id || ch_id < 0 {
 		ch_id = 0
 	}
 
