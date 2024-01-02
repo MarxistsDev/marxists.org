@@ -11,7 +11,7 @@ templ Work (work *models.Work, index int) {
 	<br/>
 	<main class="flex flex-col md:flex-row px-4 md:mx-auto w-fit max-w-full">
 		if (len(work.Works) > 0) {
-			<aside class="md:w-1/4 mr-4">
+			<aside class="md:w-1/4 mr-4 md:sticky md:top-2 h-fit">
 				<h2 class="text-3xl">{ work.Title } </h2>
 				<ul>
 					<li><a href={ templ.SafeURL(work.OldWork) }>Marxists.org Reference</a></li>
