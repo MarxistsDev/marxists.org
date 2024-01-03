@@ -2,9 +2,15 @@ package views
 
 import (
 	"fmt"
+	"strings"
 
 	"marxists.org/models"
 )
+
+func GlossaryLink(name string) string {
+	firstLetters := strings.ToLower(name[:2])
+	return fmt.Sprintf("https://www.marxists.org/glossary/people/%c/%c.htm", firstLetters[0], firstLetters[1])
+}
 
 templ Author(author *models.Author, page *uint) {
 	@Navbar(true)
@@ -30,6 +36,7 @@ templ Author(author *models.Author, page *uint) {
 					<article class="prose max-w-none">
 						@templ.Raw(author.Glossary.Description)
 					</article>
+					@Links(GlossaryLink(author.Name))
 				</div>
 			</div>
 		</section>

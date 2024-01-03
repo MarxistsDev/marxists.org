@@ -6,6 +6,35 @@ import (
 	"marxists.org/models"
 )
 
+script Links(link string) {
+	const REF = link;
+	const comp = REF.split('/');
+	comp.pop();
+	const URL = comp.join('/');
+
+	const escape = (str) => str.split("").map(c => '\\'+c).join("");
+	const count = (str, search) => (str.match(new RegExp(escape(search), "g")) || []).length;
+
+	const replaceURL = (base, url) => {
+		const cmp = base.split('/');
+		return cmp.slice(0, cmp.length - count(url, "../"))
+		    .join("/") + '/' 
+			+ url.replace(new RegExp(escape("../"), "g"), "");
+	}
+
+
+	document.querySelector('.prose')
+		.querySelectorAll('a,img')
+		.forEach(x => {
+			if(x.getAttribute('href') && !/^\#/.test(x.getAttribute('href')))
+				x.setAttribute('href', replaceURL(URL, x.getAttribute('href')) )
+
+			// To add images
+			/*else if(x.getAttribute('src'))
+				x.setAttribute('src', replaceURL(URL, x.getAttribute('src')) )*/
+		});
+}
+
 templ Work (work *models.Work, index int) {
 	@Navbar(true)
 	<br/>
@@ -23,6 +52,7 @@ templ Work (work *models.Work, index int) {
 								hx-select="#article_content"
 								hx-target="#article_content"
 								hx-swap="outerHTML"
+								hx-replace-url="true"
 								class="cursor-pointer"
 							>{ article.Title }</a>
 						</li>
@@ -30,12 +60,16 @@ templ Work (work *models.Work, index int) {
 				</ul>
 			</aside>
 		}
-		<article id="article_content" class="prose md:prose-lg lg:prose-xl">
+		<article
+			id="article_content"
+			class="prose md:prose-lg lg:prose-xl"
+		>
 			if (len(work.Works) > 0) {
 				@templ.Raw(work.Works[index].Html)
 			} else {
 				@templ.Raw(work.Html)
 			}
+			@Links(work.OldWork)
 		</article>
 	</main>
 }
