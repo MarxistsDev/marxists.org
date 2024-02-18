@@ -42,24 +42,28 @@ templ Author(author *models.Author, page *uint) {
 		</section>
 		<br/>
 		<h3 class="text-3xl">Works</h3>
-		<section id="works">
-			<ul>
-				for _, work := range author.Works {
-					<li class="max-w-screen-lg my-4">
-						<a
-							class="text-blue-600 visited:text-purple-600"
-							href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }
-						>{ work.Title }</a>
-					</li>
-				}
-			</ul>
-			<button
-				class="btn btn-wide"
-				hx-get={ fmt.Sprintf("%d", *page+1) }
-				hx-trigger="click"
-				hx-select="#works"
-				hx-target="#works"
-			>Load More</button>
-		</section>
+		if len(author.Works) == 0 {
+			<p class="pt-4">This author does not currently have any works is our system</p>
+		} else {
+			<section id="works">
+				<ul>
+					for _, work := range author.Works {
+						<li class="max-w-screen-lg my-4">
+							<a
+								class="text-blue-600 visited:text-purple-600"
+								href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }
+							>{ work.Title }</a>
+						</li>
+					}
+				</ul>
+				<button
+					class="btn w-full"
+					hx-get={ fmt.Sprintf("%d", *page+1) }
+					hx-trigger="click"
+					hx-select="#works"
+					hx-target="#works"
+				>Load More</button>
+			</section>
+		}
 	</main>
 }

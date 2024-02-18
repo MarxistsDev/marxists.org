@@ -12,39 +12,47 @@ templ Search(glossaries *[]*models.Glossary, works *[]*models.Work, query *strin
 		<br/>
 		@SearchBar(*query)
 		<br/>
-		<h3 class="text-3xl max-w-screen-lg">Glossary</h3>
-		<ul class="overflow-auto h-96 w-fit">
-			if (glossaries != nil) {
-				for _, glossary := range *glossaries {
-					<a href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>
-						<div class="flex flex-row">
-							<img class="w-24 h-24 rounded-xl object-cover" src={ fmt.Sprintf("https://www.marxists.org/%s", glossary.Image) } alt={ fmt.Sprintf("Picture of '%s'", glossary.Name) }/>
-							<div>
-								<a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>{ glossary.Name }</a>
+		if len(*glossaries) > 0 || len(*works) > 0 {
+			<h3 class="text-3xl max-w-screen-lg">Glossary</h3>
+			if len(*glossaries) == 0 {
+				<p>No Glossaries matched '{ *query }'</p>
+			} else {
+				<ul class="overflow-auto h-96 w-fit">
+					for _, glossary := range *glossaries {
+						<a href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>
+							<div class="flex flex-row">
+								<img class="w-24 h-24 rounded-xl object-cover" src={ fmt.Sprintf("https://www.marxists.org/%s", glossary.Image) } alt={ fmt.Sprintf("Picture of '%s'", glossary.Name) }/>
+								<div>
+									<a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/author/%d", glossary.AuthorID)) }>{ glossary.Name }</a>
+								</div>
 							</div>
-						</div>
-					</a>
-				}
-			}
-		</ul>
-		<br/>
-		<br/>
-		<h3 class="text-3xl">Articles</h3>
-		<section id="works">
-			<ul>
-				if (works != nil) {
-					for _, work := range *works {
-						<li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }>{ work.Title }</a></li>
+						</a>
 					}
-				}
-			</ul>
-			<button
-				class="btn btn-wide"
-				hx-get={ fmt.Sprintf("%d", *page+1) }
-				hx-trigger="click"
-				hx-select="#works"
-				hx-target="#works"
-			>Load More</button>
-		</section>
+				</ul>
+			}
+			<br/>
+			<br/>
+			<h3 class="text-3xl">Articles</h3>
+			if len(*works) == 0 {
+				<p>No Works matched '{ *query }'</p>
+			} else {
+				<section id="works">
+					<ul>
+						for _, work := range *works {
+							<li class="max-w-screen-lg my-4"><a class="text-blue-600 visited:text-purple-600" href={ templ.SafeURL(fmt.Sprintf("/work/%d", work.WorkID)) }>{ work.Title }</a></li>
+						}
+					</ul>
+					<button
+						class="btn w-full"
+						hx-get={ fmt.Sprintf("%d", *page+1) }
+						hx-trigger="click"
+						hx-select="#works"
+						hx-target="#works"
+					>Load More</button>
+				</section>
+			}
+		} else {
+			<p>No Searches matched '{ *query }'</p>
+		}
 	</main>
 }
