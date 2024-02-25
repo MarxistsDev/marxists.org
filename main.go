@@ -2,6 +2,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -12,9 +13,15 @@ import (
 var DB *gorm.DB
 
 func init() {
-	initializers.LoadEnv()
-	initializers.ConnectDB()
-	DB = initializers.DB
+	var err error
+
+	if initializers.LoadEnv(".env"); err != nil {
+		log.Fatalf("Failed environment initialization: %v", err)
+	}
+
+	if initializers.ConnectDB(); err != nil {
+		log.Fatalf("Failed database initialization: %v", err)
+	}
 }
 
 func main() {
