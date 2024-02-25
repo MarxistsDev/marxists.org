@@ -12,7 +12,7 @@ import (
 
 var DB *gorm.DB
 
-func init() {
+func Init() {
 	var err error
 
 	if initializers.LoadEnv(".env"); err != nil {
@@ -24,10 +24,12 @@ func init() {
 	}
 }
 
-func main() {
+func StartServer() {
 	router := gin.Default()
-
 	Routes(router)
-
 	router.Run(os.Getenv("PORT"))
+}
+
+func main() {
+	StartServer()
 }

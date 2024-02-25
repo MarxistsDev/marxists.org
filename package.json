@@ -7,6 +7,7 @@
   "scripts": {
     "tw": "npx tailwindcss -o ./www/styles/style.css --watch",
     "go": "templ generate && go run *.go",
-    "start": "npm run tw & npm run go"
+    "start": "npm run tw & npm run go",
+    "test-int": "docker-compose -f ./docker/tests/docker-compose.yml up --build"
   }
 }
