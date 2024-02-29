@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/tests/Dockerfile
+    environment:
+      - DSN="host=db port=15432 user=testuser password=testpass dbname=testdb sslmode=disable"
+      - PORT="0.0.0.0:18080"
+    ports:
+      - "18080:18080"
+    depends_on:
+      - db
+    command: ["go", "test", "-tags=integration", "."]
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "15432:15432"

@@ -1,5 +1,8 @@
 node_modules
 dev_data
-.vscode
 www
 *_templ.go
+
+.DS_Store
+.vscode
+.idea/
