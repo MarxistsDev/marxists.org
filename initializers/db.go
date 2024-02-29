@@ -17,10 +17,10 @@ var DB *gorm.DB
 func ConnectDB() error {
 	dsn := os.Getenv("DSN")
 	if dsn == "" {
-		return fmt.Errorf("DSN is not set!")
+		return fmt.Errorf("DSN is not set")
 	}
 
-	logger := logger.New(
+	loggerConfig := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
 			SlowThreshold: time.Second,
@@ -31,20 +31,20 @@ func ConnectDB() error {
 
 	config := &gorm.Config{
 		PrepareStmt: true,
-		Logger:      logger,
+		Logger:      loggerConfig,
 	}
 
 	var err error
 
 	DB, err = gorm.Open(postgres.Open(dsn), config)
 	if err != nil {
-		return fmt.Errorf("Failed to connect to the database: %w", err)
+		return fmt.Errorf("failed to connect to the database: %w", err)
 	}
 
 	err = DB.AutoMigrate(&models.Author{}, &models.Glossary{}, &models.Work{},
 		&models.Collection{}, &models.Movement{}) //, &models.AuthorWork{})
 	if err != nil {
-		return fmt.Errorf("Failed to auto-migrate database models: %w", err)
+		return fmt.Errorf("failed to auto-migrate database models: %w", err)
 	}
 
 	return nil

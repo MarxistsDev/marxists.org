@@ -15,11 +15,11 @@ var DB *gorm.DB
 func Init() {
 	var err error
 
-	if initializers.LoadEnv(".env"); err != nil {
+	if err = initializers.LoadEnv("./.env"); err != nil {
 		log.Fatalf("Failed environment initialization: %v", err)
 	}
 
-	if initializers.ConnectDB(); err != nil {
+	if err = initializers.ConnectDB(); err != nil {
 		log.Fatalf("Failed database initialization: %v", err)
 	}
 }
@@ -27,9 +27,13 @@ func Init() {
 func StartServer() {
 	router := gin.Default()
 	Routes(router)
-	router.Run(os.Getenv("PORT"))
+
+	if err := router.Run(os.Getenv("PORT")); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
 
 func main() {
+	Init()
 	StartServer()
 }
